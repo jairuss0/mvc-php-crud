@@ -6,7 +6,7 @@ class Database{
     private $password = "";
     private $dbname = "users_database";
     private $conn;
-
+    
     protected function connection(){
         try{
             // data source name

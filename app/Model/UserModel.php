@@ -1,12 +1,10 @@
 <?php
 
-require_once './Config/database.php';
+require_once '../Config/database.php';
 
 
 class UserModel extends Database{
     
-    
-
     //fetch users
     protected function getUserList(){
         try{
@@ -35,13 +33,13 @@ class UserModel extends Database{
 
 
     // insert user
-    protected function insertUser($name,$username,$email,$password){
+    protected function insertUser($firstName,$lastName,$email,$dob){
         try{
-            $hash_password = password_hash($password,PASSWORD_DEFAULT);
+          
 
-            $sql = "INSERT INTO user_tb (Username,Email,Password) VALUES(?,?,?)";
+            $sql = "INSERT INTO user_tb (FirstName,LastName,Email,DateOfBirth) VALUES(?,?,?,?)";
             $stmt = $this->connection()->prepare($sql);
-            return $stmt->execute([$name,$username,$email,$hash_password]);
+            return $stmt->execute([$firstName,$lastName,$email,$dob]);
 
         }catch(PDOException $e){
             echo "Error: ". $e->getMessage();
@@ -49,12 +47,12 @@ class UserModel extends Database{
     }
 
     // update user
-    protected function updateUser($id,$username,$email,$password){
+    protected function updateUser($id,$firstName,$lastName,$email,$dob){
         try{
-            $hash_password = password_hash($password,PASSWORD_DEFAULT);
-            $sql = "UPDATE user_tb SET Username=?,Email=?,Password=? WHERE UserID = ?";
+           
+            $sql = "UPDATE user_tb SET FirstName=?,LastName=?,Email=?,DateOfBirth=? WHERE UserID = ?";
             $stmt = $this->connection()->prepare($sql);
-            return $stmt->execute([$username,$email,$hash_password,$id]);
+            return $stmt->execute([$firstName,$lastName,$email,$dob,$id]);
         }catch(PDOException $e){
             echo "Error: ". $e->getMessage();
         }
