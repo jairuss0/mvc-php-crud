@@ -1,13 +1,20 @@
 <?php
 
-require_once '../app/Model/UserModel.php';
+require_once CONFIG_PATH . 'config.php';
+require_once MODEL_PATH . '/UserModel.php';
 
 
 class UserController extends UserModel{
 
+
     public function viewList(){
-        
-        include '../app/Views/UserList.view.php';
+        $stmt = $this->getUserList();
+        $message = "";
+        require VIEW_PATH . 'UserList.view.php';
+    }
+
+    public function addUser(){
+
     }
 }
 

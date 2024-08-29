@@ -1,6 +1,6 @@
 <?php
 
-require_once '../Config/database.php';
+require_once CONFIG_PATH . 'database.php';
 
 
 class UserModel extends Database{
@@ -10,9 +10,8 @@ class UserModel extends Database{
         try{
             $sql = "SELECT * from user_tb";
             $stmt = $this->connection()->prepare($sql);
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $result;
-
+            $stmt->execute();
+            return $stmt;   
         }catch(PDOException $e){
             echo "Error: ". $e->getMessage();
         }
