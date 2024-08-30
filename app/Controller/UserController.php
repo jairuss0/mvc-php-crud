@@ -9,7 +9,7 @@ class UserController extends UserModel{
 
     public function viewList(){
         $stmt = $this->getUserList();
-        $message = "";
+        $message =  isset($_GET['action']) ? $_GET['action'] : 'index';
         require VIEW_PATH . 'UserList.view.php';
     }
 

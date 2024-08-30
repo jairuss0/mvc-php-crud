@@ -6,11 +6,10 @@ include_once VIEW_PATH . 'header.php';
 <div class="container-sm">
     <div class="main mt-5">
         <div class="header d-flex align-content-center justify-content-between">
-            <h1>MVC CRUD - Basic routing + Ajax <?php echo $message ?></h1>
+            <h1>MVC CRUD - <?php echo $message ?></h1>
             <div class="btn-container align-content-center">
                 <button class="btn btn-primary" id="createUser">Create user</button>
             </div>
-
         </div>
         <div class="table mt-4">
             <table id="user_table" class="table" id="userTable">
