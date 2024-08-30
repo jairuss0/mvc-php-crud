@@ -16,28 +16,21 @@ $controller = new UserController();
 $action = isset($_GET['action']) ? $_GET['action'] : 'index';
 $requestMethod  = $_SERVER['REQUEST_METHOD'];
 
-echo 'route: ' . $action;
+
 
 // basic routing
 
 switch($action){
     case 'create':
-         echo 'add test'; 
+         $controller->createUser();
         break;
+    case 'delete':
+        $controller->removeUser();    
     default:
         $controller->viewList();
         break;
 }
 
 
-/*
-<td><?= $user['UserID'] ?></td>
-                            <td><?= $user['FirstName'] ?></td>
-                            <td><?= $user['LastName'] ?></td>
-                            <td><?= $user['Email'] ?></td>
-                            <td><?= $user['DateOfBirth'] ?></td>
-                            <td><button class="btn btn-success">Edit</button>
-                                <button class="btn btn-danger">Delete</button>
-                            </td>
-*/
+
 ?>

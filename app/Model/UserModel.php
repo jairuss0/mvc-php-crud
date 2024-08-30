@@ -20,7 +20,7 @@ class UserModel extends Database{
     // get user by id
     protected function getUserById($id){
         try{
-            $sql = "SELECT * from user_tb WHERE UserID = ?";
+            $sql = "SELECT * from user_tb WHERE UserID = ? limit 1";
             $stmt = $this->connection()->prepare($sql);
             $stmt->execute([$id]);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -34,12 +34,9 @@ class UserModel extends Database{
     // insert user
     protected function insertUser($firstName,$lastName,$email,$dob){
         try{
-          
-
             $sql = "INSERT INTO user_tb (FirstName,LastName,Email,DateOfBirth) VALUES(?,?,?,?)";
             $stmt = $this->connection()->prepare($sql);
             return $stmt->execute([$firstName,$lastName,$email,$dob]);
-
         }catch(PDOException $e){
             echo "Error: ". $e->getMessage();
         }
