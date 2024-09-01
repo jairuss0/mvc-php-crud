@@ -1,0 +1,33 @@
+ # Prevent directory listing
+Options -Indexes
+ 
+ RewriteEngine On
+
+    # Deny access to all .ht* files
+    RewriteRule ^\.ht - [F,L,NC]
+
+    # Deny access to the app directory
+    RewriteRule ^app/ - [F,L,NC]
+
+    # Deny access to the config directory
+    RewriteRule ^config/ - [F,L,NC]
+
+    # Deny access to any PHP files in the public directory (except index.php)
+    RewriteCond %{REQUEST_FILENAME} !index.php
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteCond %{REQUEST_FILENAME} \.php$
+    RewriteRule ^public/ - [F,L,NC]
+
+    # Redirect all other requests to index.php for routing
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule . /index.php [L]
+
+    # Protect from Clickjacking
+Header always append X-Frame-Options DENY
+
+# Prevent MIME-type sniffing
+Header set X-Content-Type-Options nosniff
+
+# Enable cross-site scripting filter
+Header set X-XSS-Protection "1; mode=block"

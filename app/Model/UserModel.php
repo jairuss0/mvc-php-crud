@@ -11,7 +11,8 @@ class UserModel extends Database{
             $sql = "SELECT * from user_tb";
             $stmt = $this->connection()->prepare($sql);
             $stmt->execute();
-            return $stmt;   
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
         }catch(PDOException $e){
             echo "Error: ". $e->getMessage();
         }
@@ -24,12 +25,12 @@ class UserModel extends Database{
             $stmt = $this->connection()->prepare($sql);
             $stmt->execute([$id]);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
+           
         }catch(PDOException $e){
             echo "Error: ". $e->getMessage();
         }
        
     }
-
 
     // insert user
     protected function insertUser($firstName,$lastName,$email,$dob){

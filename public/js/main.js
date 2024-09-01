@@ -1,13 +1,17 @@
+let user_dataTable;
+
 $(document).ready(function(){
+    
+    loadUsers();
 
     $("#createUser").click(function(){
-        $("#user-form")[0].reset();
+        $("#user_form")[0].reset();
         $('#userId').val('');
         $('.modal-title').text('Create User');
-        $('#user-modal').modal('show')
+        $('#user_modal').modal('show')
     });
 
-    $('#user-form').submit(function(event){
+    $('#user_form').submit(function(event){
         event.preventDefault();
         const formData = $(this).serialize();
         $.ajax({
@@ -17,8 +21,9 @@ $(document).ready(function(){
             dataType: 'json',
             success: function(response){
                 if(response.result){
-                    $('#user-modal').modal("hide");
+                    $('#user_modal').modal("hide");
                     //location.reload();
+                   loadUsers();
                 }
                 Swal.fire({
                     title: response.title,
@@ -37,51 +42,131 @@ $(document).ready(function(){
         });
     });
 
-    $('.delete_user').click(function(){
-        // get the data-id attr value
-        const id = $(this).data('id');
-        Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!"
-          }).then((result) => {
-            if (result.isConfirmed) {
-                
-                $.ajax({
-                    url: 'index.php?action=delete',
-                    method: 'POST',
-                    data: {
-                        id: id
-                    },
-                    dataType: 'json',
-                    // success not working
-                    success: function(response){
-                        
-                        Swal.fire({
-                            title: response.title,
-                            text: response.message,
-                            icon: response.icon
-                        });
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('AJAX Error:', status, error);
-                        console.log(xhr.responseText);
-                        Swal.fire({
-                            title: response.title,
-                            text: xhr.responseText,
-                            icon: response.icon
-                        });
-                    }
-                    
-                });
-              
-              
-            }
-          });
-    });
     
 });
+
+function deleteUser(id){
+    // get the data-id attr value
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: 'index.php?action=delete',
+                method: 'POST',
+                data: {
+                    id: id
+                },
+                dataType: 'json',
+                // success not working
+                success: function(response){
+                    if(response.result){
+                        loadUsers();
+                    }
+                    Swal.fire({
+                        title: response.title,
+                        text: response.message,
+                        icon: response.icon
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', status, error);
+                    console.log(xhr.responseText);
+                    Swal.fire({
+                        title: response.title,
+                        text: xhr.responseText,
+                        icon: response.icon
+                    });
+                }
+                
+            });
+          
+          
+        }
+    });
+}
+
+function editUser(id){
+   
+    $.ajax({
+        url: 'index.php?action=edit&id='+id,
+        method: 'GET',
+        dataType: 'json',
+        success: function(response){
+            console.log(response);
+            if(response.status){
+                $('#userId').val(response[0].UserID);
+                $('#firstName').val(response[0].LastName);
+                $('#lastName').val(response[0].FirstName);
+                $('#email').val(response[0].Email);
+                $('#dateBirth').val(response[0].DateOfBirth);
+                $('#user_modal').modal('show');
+            }
+        },
+        error: function(xhr,response){
+            if(!response.status){
+                Swal.fire({
+                    title: 'Failed',
+                    text: response.responseText,
+                    icon: 'error'
+                });
+            }
+            Swal.fire({
+                title: 'Opps..',
+                text: xhr.responseText,
+                icon: 'error'
+            });
+            
+        }
+    });
+}
+
+function loadUsers(){
+    $.ajax({
+        method: "GET",
+        url: "index.php?action=view",
+        dataType: 'json',
+        success: function (response) {
+          console.log(response);
+          // clear and destroy existing dataTable instance
+          if (user_dataTable) {
+            user_dataTable.clear().destroy();
+          }
+          let rows;
+          response.forEach((item) => {
+            rows += `<tr>
+                                          <td>${item["UserID"]}</td>
+                                          <td>${item["FirstName"]}</td>
+                                          <td>${item["LastName"]}</td>
+                                          <td>${item["Email"]}</td>
+                                          <td>${item["DateOfBirth"]}</td>
+                                          <td><button type="button" class="btn btn-success "   onclick="editUser(${item["UserID"]})">
+                                                   Update
+                                              </button>
+                                              <button type="button" class="btn btn-danger "  onclick="deleteUser(${item["UserID"]})" >
+                                                   Delete
+                                              </button></td>
+                      </tr>`;
+          });
+          $("#user_table tbody").html(rows);
+          user_dataTable = $("#user_table").DataTable({
+            responsive: true,
+            scrollX: true,
+            autoWidth: false,
+          }); // Re-Initialize dataTable
+        },
+        error: function (response) {
+          Swal.fire({
+            title: "failed to load user data",
+            text: response.responseText,
+            icon: 'error',
+          });
+        },
+    });
+}

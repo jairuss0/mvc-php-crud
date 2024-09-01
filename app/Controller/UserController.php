@@ -6,18 +6,21 @@ require_once MODEL_PATH . '/UserModel.php';
 
 class UserController extends UserModel{
 
+    public function index(){
+        require_once VIEW_PATH . 'UserList.view.php';
+    }
 
-    public function viewList(){
-        $stmt = $this->getUserList();
-        $message =  isset($_GET['action']) ? $_GET['action'] : 'index';
-        require VIEW_PATH . 'UserList.view.php';
+    public function viewUsers(){
+        $users = $this->getUserList();
+        echo json_encode($users);
+        exit(); 
     }
 
     public function createUser(){
-        $fname = $_POST['firstName'];
-        $lname = $_POST['lastName'];
-        $email = $_POST['email'];
-        $dob = $_POST['dateBirth'];
+        $fname = filter_input(INPUT_POST,'firstName',FILTER_SANITIZE_SPECIAL_CHARS);
+        $lname = filter_input(INPUT_POST,'lastName',FILTER_SANITIZE_SPECIAL_CHARS);
+        $email = filter_input(INPUT_POST,'email',FILTER_SANITIZE_SPECIAL_CHARS);
+        $dob = filter_input(INPUT_POST,'dateBirth',FILTER_SANITIZE_SPECIAL_CHARS);
 
         if($this->insertUser($fname,$lname,$email,$dob)){
            
@@ -31,12 +34,26 @@ class UserController extends UserModel{
         exit(); // stops executing any further code.
     }
 
-    public function findUserbyId(){
-
+    public function update(){
+        $id = filter_input(INPUT_POST,'id',FILTER_SANITIZE_SPECIAL_CHARS);
+        $fname = filter_input(INPUT_POST,'firstName',FILTER_SANITIZE_SPECIAL_CHARS);
+        $lname = filter_input(INPUT_POST,'lastName',FILTER_SANITIZE_SPECIAL_CHARS);
+        $email = filter_input(INPUT_POST,'email',FILTER_SANITIZE_SPECIAL_CHARS);
+        $dob = filter_input(INPUT_POST,'dateBirth',FILTER_SANITIZE_SPECIAL_CHARS);
+        
+        if($this->updateUser($id,$fname,$lname,$email,$dob)){
+            $delete_response = array('result' => true, 'message' => 'Successfully Updated User!','icon' => 'success', 'title' => 'Success!');
+            echo json_encode($delete_response);
+        }
+        else{
+            $delete_response = array('result' => false, 'message' => 'Failed to update User!','icon' => 'error', 'title' => 'Something went wrong!');
+            echo json_encode($delete_response);
+        }
+        exit();
     }
 
     public function removeUser(){
-        $id = $_POST['id'];
+        $id = filter_input(INPUT_POST,'id',FILTER_SANITIZE_SPECIAL_CHARS);
         
         if($this->deleteUser($id)){
             
@@ -49,6 +66,20 @@ class UserController extends UserModel{
         }
         exit(); // stops executing any further code.
         
+    }
+
+    public function userInfo(){
+        $id = $_GET['id'];
+        
+        if($this->getUserById($id)){
+            $user = $this->getUserById($id);
+            $user['status'] = true;
+        }
+        else{
+            $user['status'] = false;
+        }
+        echo json_encode($user);
+        exit();
     }
 }
 

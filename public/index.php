@@ -17,17 +17,25 @@ $action = isset($_GET['action']) ? $_GET['action'] : 'index';
 $requestMethod  = $_SERVER['REQUEST_METHOD'];
 
 
-
 // basic routing
 
 switch($action){
+    
     case 'create':
          $controller->createUser();
         break;
+    case 'edit':
+        $controller->userInfo();
+        break;
+    case 'update':
+        $controller->update();
+        break;        
     case 'delete':
-        $controller->removeUser();    
+        $controller->removeUser();   
+    case 'view':
+        $controller->viewUsers();     
     default:
-        $controller->viewList();
+        $controller->index();
         break;
 }
 
