@@ -1,6 +1,11 @@
 <?php
 
-class Database{
+namespace Core;
+
+use \PDO;
+use \PDOException;
+
+class Model{
     private $host = "localhost";
     private $user = "root";
     private $password = "";
@@ -24,7 +29,7 @@ class Database{
 
         return $this->conn;
     }
-}
 
+}
 
 ?>

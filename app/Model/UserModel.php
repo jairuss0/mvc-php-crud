@@ -1,12 +1,15 @@
 <?php
 
-require_once CONFIG_PATH . 'database.php';
+namespace Model;
 
+use Core\Model;
+use \PDO;
+use \PDOException;
 
-class UserModel extends Database{
+class UserModel extends Model{
     
     //fetch users
-    protected function getUserList(){
+    public function getUserList(){
         try{
             $sql = "SELECT * from user_tb";
             $stmt = $this->connection()->prepare($sql);
@@ -19,7 +22,7 @@ class UserModel extends Database{
     }
 
     // get user by id
-    protected function getUserById($id){
+    public function getUserById($id){
         try{
             $sql = "SELECT * from user_tb WHERE UserID = ? limit 1";
             $stmt = $this->connection()->prepare($sql);
@@ -33,7 +36,7 @@ class UserModel extends Database{
     }
 
     // insert user
-    protected function insertUser($firstName,$lastName,$email,$dob){
+    public function insertUser($firstName,$lastName,$email,$dob){
         try{
             $sql = "INSERT INTO user_tb (FirstName,LastName,Email,DateOfBirth) VALUES(?,?,?,?)";
             $stmt = $this->connection()->prepare($sql);
@@ -44,7 +47,7 @@ class UserModel extends Database{
     }
 
     // update user
-    protected function updateUser($id,$firstName,$lastName,$email,$dob){
+    public function updateUser($id,$firstName,$lastName,$email,$dob){
         try{
            
             $sql = "UPDATE user_tb SET FirstName=?,LastName=?,Email=?,DateOfBirth=? WHERE UserID = ?";
@@ -57,7 +60,7 @@ class UserModel extends Database{
     }
 
     // delete user
-    protected function deleteUser($id){
+    public function deleteUser($id){
         try{
             $sql ="DELETE from user_tb WHERE UserID = ?";
             $stmt = $this->connection()->prepare($sql);

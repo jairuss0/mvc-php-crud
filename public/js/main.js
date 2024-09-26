@@ -8,14 +8,15 @@ $(document).ready(function(){
         $("#user_form")[0].reset();
         $('#userId').val('');
         $('.modal-title').text('Create User');
-        $('#user_modal').modal('show')
+        $('#user_modal').modal('show');
     });
 
     $('#user_form').submit(function(event){
         event.preventDefault();
+        const routeUrl = $('#userId').val() ? '/mvc-crud/Public/users/edit' : '/mvc-crud/Public/users/add';
         const formData = $(this).serialize();
         $.ajax({
-            url: 'index.php?action=' + ($('#userId').val() ? 'update' : 'create'),
+            url: routeUrl,
             method: 'POST',
             data: formData,
             dataType: 'json',
@@ -58,7 +59,7 @@ function deleteUser(id){
       }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: 'index.php?action=delete',
+                url: '/mvc-crud/Public/users/delete',
                 method: 'POST',
                 data: {
                     id: id
@@ -95,8 +96,11 @@ function deleteUser(id){
 function editUser(id){
    
     $.ajax({
-        url: 'index.php?action=edit&id='+id,
-        method: 'GET',
+        url: '/mvc-crud/Public/users/show',
+        method: 'POST',
+        data: {
+            id: id
+        },
         dataType: 'json',
         success: function(response){
             console.log(response);
@@ -129,8 +133,8 @@ function editUser(id){
 
 function loadUsers(){
     $.ajax({
-        method: "GET",
-        url: "index.php?action=view",
+        method: "POST",
+        url: "/mvc-crud/Public/users/load",
         dataType: 'json',
         success: function (response) {
           console.log(response);

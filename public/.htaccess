@@ -1,0 +1,18 @@
+Options -MultiViews
+RewriteEngine On
+
+RewriteBase /mvc-crud/public/
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+
+RewriteRule ^(.+)$ index.php?url=$1 [QSA,L]
+
+# Protect from Clickjacking
+Header always append X-Frame-Options DENY
+
+# Prevent MIME-type sniffing
+Header set X-Content-Type-Options nosniff
+
+# Enable cross-site scripting filter
+Header set X-XSS-Protection "1; mode=block"

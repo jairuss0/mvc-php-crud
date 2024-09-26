@@ -1,6 +1,5 @@
 <?php
-require_once CONFIG_PATH . 'config.php';
-include_once VIEW_PATH . 'header.php';
+ include_once  '../app/Views/header.php';
 ?>
 
 <div class="container-sm">
@@ -73,32 +72,5 @@ include_once VIEW_PATH . 'header.php';
 </div>
 
 <?php
-include_once VIEW_PATH . 'footer.php';
-/*
-<td><?= $user['UserID'] ?></td>
-                            <td><?= $user['FirstName'] ?></td>
-                            <td><?= $user['LastName'] ?></td>
-                            <td><?= $user['Email'] ?></td>
-                            <td><?= $user['DateOfBirth'] ?></td>
-                            <td><button class="btn btn-success">Edit</button>
-                                <button class="btn btn-danger">Delete</button>
-                            </td>
-
-
-                            <!---
-                    <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)): ?>
-                        <tr>
-                            <td><?= $row['UserID'] ?></td>
-                            <td><?= $row['FirstName'] ?></td>
-                            <td><?= $row['LastName'] ?></td>
-                            <td><?= $row['Email'] ?></td>
-                            <td><?= $row['DateOfBirth'] ?></td>
-                            <td>
-                                <button class="btn btn-success update_user"  data-id="<?= $row['UserID'] ?>">Update user</button>
-                                <button class="btn btn-danger delete_user"  data-id="<?= $row['UserID'] ?>">Delete user</button>
-                            </td>
-                        </tr>
-                    <?php endwhile; ?>
-                    -->
-*/
+include_once '../app/Views/footer.php';
 ?>

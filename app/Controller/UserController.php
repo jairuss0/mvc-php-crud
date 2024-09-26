@@ -1,17 +1,25 @@
 <?php
 
-require_once CONFIG_PATH . 'config.php';
-require_once MODEL_PATH . '/UserModel.php';
+use Core\Controller;
+use Model\UserModel;
 
+class UserController extends Controller{
 
-class UserController extends UserModel{
+    private $userModel;
+
+    function __construct()
+    {
+        $this->userModel = new UserModel();
+    }
 
     public function index(){
-        require_once VIEW_PATH . 'UserList.view.php';
+        
+        $this->loadView('home');
+        
     }
 
     public function viewUsers(){
-        $users = $this->getUserList();
+        $users = $this->userModel->getUserList();
         echo json_encode($users);
         exit(); 
     }
@@ -22,7 +30,7 @@ class UserController extends UserModel{
         $email = filter_input(INPUT_POST,'email',FILTER_SANITIZE_SPECIAL_CHARS);
         $dob = filter_input(INPUT_POST,'dateBirth',FILTER_SANITIZE_SPECIAL_CHARS);
 
-        if($this->insertUser($fname,$lname,$email,$dob)){
+        if($this->userModel->insertUser($fname,$lname,$email,$dob)){
            
             echo json_encode(['result' => true, 'message' => 'Successfully Created User!','icon' => 'success', 'title' => 'Success!']);
         }
@@ -41,7 +49,7 @@ class UserController extends UserModel{
         $email = filter_input(INPUT_POST,'email',FILTER_SANITIZE_SPECIAL_CHARS);
         $dob = filter_input(INPUT_POST,'dateBirth',FILTER_SANITIZE_SPECIAL_CHARS);
         
-        if($this->updateUser($id,$fname,$lname,$email,$dob)){
+        if($this->userModel->updateUser($id,$fname,$lname,$email,$dob)){
             $delete_response = array('result' => true, 'message' => 'Successfully Updated User!','icon' => 'success', 'title' => 'Success!');
             echo json_encode($delete_response);
         }
@@ -55,7 +63,7 @@ class UserController extends UserModel{
     public function removeUser(){
         $id = filter_input(INPUT_POST,'id',FILTER_SANITIZE_SPECIAL_CHARS);
         
-        if($this->deleteUser($id)){
+        if($this->userModel->deleteUser($id)){
             
             $delete_response = array('result' => true, 'message' => 'Successfully Deleted User!','icon' => 'success', 'title' => 'Success!');
             echo json_encode($delete_response);
@@ -69,10 +77,10 @@ class UserController extends UserModel{
     }
 
     public function userInfo(){
-        $id = $_GET['id'];
+        $id = $_POST['id'];
         
-        if($this->getUserById($id)){
-            $user = $this->getUserById($id);
+        if($this->userModel->getUserById($id)){
+            $user = $this->userModel->getUserById($id);
             $user['status'] = true;
         }
         else{
@@ -81,6 +89,7 @@ class UserController extends UserModel{
         echo json_encode($user);
         exit();
     }
+
 }
 
 ?>
