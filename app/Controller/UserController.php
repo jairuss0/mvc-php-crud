@@ -9,6 +9,7 @@ class UserController extends Controller{
 
     function __construct()
     {
+        // instantiate model class
         $this->userModel = new UserModel();
     }
 
