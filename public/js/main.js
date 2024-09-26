@@ -106,8 +106,8 @@ function editUser(id){
             console.log(response);
             if(response.status){
                 $('#userId').val(response[0].UserID);
-                $('#firstName').val(response[0].LastName);
-                $('#lastName').val(response[0].FirstName);
+                $('#firstName').val(response[0].FirstName);
+                $('#lastName').val(response[0].LastName);
                 $('#email').val(response[0].Email);
                 $('#dateBirth').val(response[0].DateOfBirth);
                 $('#user_modal').modal('show');
