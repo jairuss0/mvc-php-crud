@@ -94,7 +94,7 @@ function deleteUser(id){
 }
 
 function editUser(id){
-   
+    $('.modal-title').text('Update User');
     $.ajax({
         url: '/mvc-crud/Public/users/show',
         method: 'POST',
@@ -105,6 +105,7 @@ function editUser(id){
         success: function(response){
             console.log(response);
             if(response.status){
+                
                 $('#userId').val(response[0].UserID);
                 $('#firstName').val(response[0].FirstName);
                 $('#lastName').val(response[0].LastName);

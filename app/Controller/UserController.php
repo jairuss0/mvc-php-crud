@@ -1,7 +1,9 @@
 <?php
 
-use Core\Controller;
+
 use Model\UserModel;
+use Core\Controller;
+
 
 class UserController extends Controller{
 
